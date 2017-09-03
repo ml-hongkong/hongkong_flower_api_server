@@ -16,16 +16,16 @@ class Result {
     }
   }
 
-  getStatus(imageId){
-    for(let x of this.arr){
-      if( x.image_id === imageId ) return x.status;
+  getStatus(imageId) {
+    for (let x of this.arr) {
+      if (x.image_id === imageId) return x.status;
     }
     return null;
   }
 
-  setStatus(imageId, status){
-    for(let x of this.arr){
-      if( x.image_id === imageId ){
+  setStatus(imageId, status) {
+    for (let x of this.arr) {
+      if (x.image_id === imageId) {
         x.status = status;
       }
     }
@@ -72,7 +72,7 @@ function parentNode() {
 
 function renderResult(d) {
   // this = div.result
-  if (d.status === 'pending') {
+  if (['pending', 'processing'].indexOf(d.status) >= 0) {
     d3.select(this)
       .append('div').classed('svg-wrapper', true)
       .append('svg').attr('width', 40).attr('height', 40).attr('viewBox', '10 10 80 80')
@@ -84,7 +84,7 @@ function renderResult(d) {
     // console.log('d', d.result);
     let row = d3.select(this)
       .append('div').classed('rank-wrapper', true)
-      .selectAll('div.rank').data(d.result.slice(0,4).sort((a,b) => b-a));
+      .selectAll('div.rank').data(d.result.slice(0, 4).sort((a, b) => b - a));
     row.enter()
       .append('div').classed('rank', true)
       .append('span').text(d => d.class)
@@ -97,11 +97,11 @@ function renderResults(res) {
   let lis = res.toList();
   let x = d3.select('.list-section').selectAll('div.item').data(lis);
 
-  x.each(function(d){
+  x.each(function (d) {
     // this = div.item
-    if( ['pending', 'processing'].indexOf(d.status) >= 0 ){
+    if (['pending', 'processing'].indexOf(d.status) >= 0) {
       $(this).find('div.status').text(d.status);
-    } else if( d.status === 'done' ){
+    } else if (d.status === 'done') {
       let n = d3.select(this).select('div.result');
       n.selectAll('*').remove();
       renderResult.bind(n.node(), d)();
@@ -137,7 +137,7 @@ function pollResults(results) {
         // result.update(i, res.data);
 
         let lastStatus = results.getStatus(x.image_id);
-        if( lastStatus !== data.status){
+        if (lastStatus !== data.status) {
           results.setStatus(x.image_id, data.status);
 
           if (data.status === 'done') {

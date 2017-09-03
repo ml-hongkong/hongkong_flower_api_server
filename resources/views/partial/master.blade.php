@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ voyager_asset('lib/css/bootstrap.min.css') }}">
 
+    <script type="text/javascript" src="{{ voyager_asset('lib/js/jquery.min.js') }}"></script>
 
     @if(!empty(config('voyager.additional_css')))
 

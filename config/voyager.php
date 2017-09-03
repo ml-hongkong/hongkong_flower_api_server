@@ -224,7 +224,7 @@ return [
     ],
 
     'additional_js' => [
-        'js/jquery.min.js',
+//        'js/jquery.min.js',
         'js/axios.min.js',
         'js/d3.v4.min.js',
         'js/Rx.min.js',

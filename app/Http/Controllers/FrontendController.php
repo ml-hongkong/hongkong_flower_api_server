@@ -7,6 +7,7 @@ use Intervention\Image\ImageManagerStatic as Img;
 use App\Image;
 use App\Worker;
 use TCG\Voyager\Models\User;
+use GuzzleHTTP\Exception\ConnectException;
 
 class FrontendController extends Controller
 {
@@ -51,19 +52,22 @@ class FrontendController extends Controller
         // send the file to ml server
         $worker = Worker::inRandomOrder()->first();
         if ($worker) {
-            $client = new \GuzzleHttp\Client();
-            $response = $client->post($worker->endpoint, [
-                'json' => [
-                    'job_id' => $jobId,
-                    'image_url' => imageUrl,
-                ]
-            ]);
-            if( $response->getStatusCode() == 200 ){
-                $img->status = 'assigned';
+            try {
+                $client = new \GuzzleHttp\Client();
+                $response = $client->post($worker->endpoint, [
+                    'json' => [
+                        'job_id' => $jobId,
+                        'image_url' => $imageUrl,
+                    ]
+                ]);
+                if ($response->getStatusCode() == 200) {
+                    $img->status = 'processing';
+                }
+            } catch (ConnectException $e){
+
             }
         }
         $img->save();
-
 
         return response()->json([
             'status' => $img->status,
@@ -82,7 +86,7 @@ class FrontendController extends Controller
                 'status' => $img->status,
                 'image_id' => $imageId
             ];
-            if( $img->result ) $res['result'] = json_decode( $img->result );
+            if ($img->result) $res['result'] = json_decode($img->result);
             return response()->json($res);
         } else {
             return response()->json([

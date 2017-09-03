@@ -10,10 +10,10 @@ class WorkerController extends Controller
     public function finish(Request $request)
     {
         $jobId = $request->input('job_id');
-        $result = $request->input('result');
         $img = Image::where('job_id', $jobId)->first();
         if ($img) {
             if ($request->has('result')) {
+                $result = $request->input('result');
                 $img->status = 'done';
                 $img->result = json_encode($result);
                 $img->save();
