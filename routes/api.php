@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Image;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,18 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['prefix' => 'v0'], function () {
+
+
+    Route::post('/request', 'FrontendController@request');
+    Route::get('/result/{imageId}', 'FrontendController@result');
+
+    Route::post('/finish', 'WorkerController@finish');
+
+    Route::group(['middleware' => 'auth:api'], function () {
+
+
+    });
+});
+

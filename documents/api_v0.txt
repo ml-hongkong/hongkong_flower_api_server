@@ -1,0 +1,46 @@
+POST /classify
+  - description
+  - payload 
+      image:
+  - response: 
+      status: { 'busy', 'done' } 
+      content: [ { class: String, score: Float } ]
+
+POST /login
+
+POST /logout
+
+POST /request 
+  - description
+      Users request to submit an image to server
+  - behavior
+      - Users may submit multiple times for the same image_hash,
+        and in case of duplicated hash, server will response
+        `processing` or `done`
+      - If server response `ready`, client application may
+        proceed to /submit image with the image_id returned.
+  - condition 
+      - client must have logged in.
+  - payload 
+      - name : String
+      - image_hash : String
+  - response 
+      - status : { 'ready', 'processing', 'done' }
+      - image_id : 
+      - created_at : 
+      - updated_at :
+
+POST /poll
+   
+POST /submit
+
+  - condition 
+      - client must have logged in
+  - payload 
+      - image_id :
+      - image
+  - response
+      - status : 
+      - image_id : 
+  
+  
