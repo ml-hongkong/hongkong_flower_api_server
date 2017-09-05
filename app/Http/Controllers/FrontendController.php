@@ -47,7 +47,8 @@ class FrontendController extends Controller
         $img->image_id = $imageId;
         $img->job_id = $jobId;
         $img->status = 'pending';
-        $img->image_url = $path;
+//        $img->image_url = $path;
+        $img->image_url = $imageUrl;
 
         // send the file to ml server
         $worker = Worker::inRandomOrder()->first();
