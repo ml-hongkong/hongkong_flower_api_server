@@ -10,7 +10,6 @@ body {
   flex-direction: column;
 }
 
-
 .upload-section {
   background: $theme-color;
   box-shadow: 0 2px 50px rgba(0, 0, 0, .3);
@@ -31,11 +30,31 @@ body {
     overflow: hidden;
 
     .image {
+      position: relative;
       width: 200px;
       height: 150px;
       background-color: #222;
       background-position: center center;
       background-size: cover;
+
+      &:hover {
+        .cross {
+          opacity: 1;
+        }
+      }
+    }
+
+    .cross {
+      color: white;
+      position: absolute;
+      font-size: 12px;
+      text-shadow: 0 0 2px #333;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+
+      opacity: 0;
+      transition-duration: 0.1s;
     }
 
     .result {
@@ -75,9 +94,11 @@ body {
   span {
     float: right;
   }
-  a {
+
+  a.author {
     color: white;
-    text-decoration: none;
+    text-decoration: underline;
+    font-weight: bold;
   }
 
 }

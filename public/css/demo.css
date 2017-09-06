@@ -39,11 +39,29 @@ body {
 }
 
 .list-section .item .image {
+  position: relative;
   width: 200px;
   height: 150px;
   background-color: #222;
   background-position: center center;
   background-size: cover;
+}
+
+.list-section .item .image:hover .cross {
+  opacity: 1;
+}
+
+.list-section .item .cross {
+  color: white;
+  position: absolute;
+  font-size: 12px;
+  text-shadow: 0 0 2px #333;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  opacity: 0;
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
 }
 
 .list-section .item .result {
@@ -86,8 +104,9 @@ body {
   float: right;
 }
 
-.footer a {
+.footer a.author {
   color: white;
-  text-decoration: none;
+  text-decoration: underline;
+  font-weight: bold;
 }
 

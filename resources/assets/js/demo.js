@@ -16,6 +16,11 @@ class Result {
     }
   }
 
+  remove(imageId) {
+    this.arr = this.arr.filter(x => x.image_id !== imageId);
+    this.save();
+  }
+
   getStatus(imageId) {
     for (let x of this.arr) {
       if (x.image_id === imageId) return x.status;
@@ -71,7 +76,7 @@ function parentNode() {
 }
 
 function renderResult(d) {
-  // this = div.result
+  // this == div.result
   if (['pending', 'processing'].indexOf(d.status) >= 0) {
     d3.select(this)
       .append('div').classed('svg-wrapper', true)
@@ -84,7 +89,7 @@ function renderResult(d) {
     // console.log('d', d.result);
     let row = d3.select(this)
       .append('div').classed('rank-wrapper', true)
-      .selectAll('div.rank').data(d.result.slice(0, 4).sort((a, b) => b - a));
+      .selectAll('div.rank').data(d.result.sort((a, b) => b.score - a.score).slice(0, 4));
     row.enter()
       .append('div').classed('rank', true)
       .append('span').text(d => d.class)
@@ -112,7 +117,14 @@ function renderResults(res) {
     .append('div').classed('item', true)
     .append('div').classed('image', true)
     .attr('style', d => `background-image: url(${d.image_url})`)
-    .select(parentNode)
+    .append('span').classed('cross', true).text('✕')
+    .on('click', function (d, i) {
+      console.log('click', 'delete', d, i)
+      res.remove(d.image_id);
+      renderResults(res);
+
+    })
+    .select(parentNode).select(parentNode)
     .append('div').classed('result', true)
     .each(renderResult);
 

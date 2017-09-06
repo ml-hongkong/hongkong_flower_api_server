@@ -116,6 +116,6 @@
     </div>
 
     <div class="footer">
-        <span>made with  ❤  by <a href="https://github.com/ml-hongkong">ml-hongkong</a></span>
+        <span>made with  ❤  by <a class="author" href="https://github.com/ml-hongkong">ml-hongkong</a></span>
     </div>
 @endsection

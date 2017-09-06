@@ -104,6 +104,14 @@ var Result = function () {
       }
     }
   }, {
+    key: 'remove',
+    value: function remove(imageId) {
+      this.arr = this.arr.filter(function (x) {
+        return x.image_id !== imageId;
+      });
+      this.save();
+    }
+  }, {
     key: 'getStatus',
     value: function getStatus(imageId) {
       var _iteratorNormalCompletion = true;
@@ -213,15 +221,15 @@ function parentNode() {
 }
 
 function renderResult(d) {
-  // this = div.result
+  // this == div.result
   if (['pending', 'processing'].indexOf(d.status) >= 0) {
     d3.select(this).append('div').classed('svg-wrapper', true).append('svg').attr('width', 40).attr('height', 40).attr('viewBox', '10 10 80 80').append('use').attr('xlink:href', '#loading').select(parentNode).select(parentNode).append('div').classed('status', true).text(d.status);
   }
   if (d.status === 'done') {
     // console.log('d', d.result);
-    var row = d3.select(this).append('div').classed('rank-wrapper', true).selectAll('div.rank').data(d.result.slice(0, 4).sort(function (a, b) {
-      return b - a;
-    }));
+    var row = d3.select(this).append('div').classed('rank-wrapper', true).selectAll('div.rank').data(d.result.sort(function (a, b) {
+      return b.score - a.score;
+    }).slice(0, 4));
     row.enter().append('div').classed('rank', true).append('span').text(function (d) {
       return d.class;
     }).select(parentNode).append('span').text(function (d) {
@@ -247,7 +255,11 @@ function renderResults(res) {
 
   x.enter().append('div').classed('item', true).append('div').classed('image', true).attr('style', function (d) {
     return 'background-image: url(' + d.image_url + ')';
-  }).select(parentNode).append('div').classed('result', true).each(renderResult);
+  }).append('span').classed('cross', true).text('✕').on('click', function (d, i) {
+    console.log('click', 'delete', d, i);
+    res.remove(d.image_id);
+    renderResults(res);
+  }).select(parentNode).select(parentNode).append('div').classed('result', true).each(renderResult);
 
   x.exit().remove();
 }
