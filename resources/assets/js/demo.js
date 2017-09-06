@@ -151,7 +151,7 @@ function renderResult(d) {
       .append('div').classed('rank', true)
       .append('span').text(d => d.class)
       .select(parentNode)
-      .append('span').text(d => d.score.toFixed(2))
+      .append('span').text(d =>  (100*d.score).toFixed(1) + '%')
   }
 }
 
@@ -229,7 +229,7 @@ function pollResults(results) {
 pollResults(results);
 
 // add listener
-$('input[type="file"]').on('change', function (event) {
+$('input[name="image"]').on('change', function (event) {
   let file = this.files[0];
   if (!file) return;
 
@@ -247,3 +247,7 @@ $('input[type="file"]').on('change', function (event) {
   // clear form
   this.form.reset();
 });
+
+$('.upload-button').on('click', function(event){
+  $('input[name="image"]').click();
+})

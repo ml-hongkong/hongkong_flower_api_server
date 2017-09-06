@@ -94,21 +94,13 @@
     <div class="upload-section">
         @yield('loading-svg')
 
-        <div class="container">
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>Flower Classification</h2>
-
-                    <form action="/api/v0/classify" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="image">Upload an image of flower</label>
-                            <input class="form-control" type="file" name="image" accept=".jpg, .jpeg, .png"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+        <div class="frame">
+            <form action="/api/v0/classify" method="POST" enctype="multipart/form-data">
+                <div class="title">Flower Classification</div>
+                <span class="upload-button">Upload an image of flower</span>
+                <input class="form-control" type="file" name="image" accept=".jpg, .jpeg, .png"
+                       style="display: none"/>
+            </form>
         </div>
     </div>
 

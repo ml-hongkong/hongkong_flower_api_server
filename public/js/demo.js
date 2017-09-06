@@ -1,1 +1,389 @@
-!function(e){function t(n){if(r[n])return r[n].exports;var a=r[n]={i:n,l:!1,exports:{}};return e[n].call(a.exports,a,a.exports,t),a.l=!0,a.exports}var r={};t.m=e,t.c=r,t.d=function(e,r,n){t.o(e,r)||Object.defineProperty(e,r,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(r,"a",r),r},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=42)}({42:function(e,t,r){e.exports=r(43)},43:function(e,t){function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(){return this.parentNode}function a(e){if(["pending","processing"].indexOf(e.status)>=0&&d3.select(this).append("div").classed("svg-wrapper",!0).append("svg").attr("width",40).attr("height",40).attr("viewBox","10 10 80 80").append("use").attr("xlink:href","#loading").select(n).select(n).append("div").classed("status",!0).text(e.status),"done"===e.status){d3.select(this).append("div").classed("rank-wrapper",!0).selectAll("div.rank").data(e.result.sort(function(e,t){return t.score-e.score}).slice(0,4)).enter().append("div").classed("rank",!0).append("span").text(function(e){return e.class}).select(n).append("span").text(function(e){return e.score.toFixed(2)})}}function i(e){var t=e.toList(),r=d3.select(".list-section").selectAll("div.item").data(t);r.each(function(e){if(["pending","processing"].indexOf(e.status)>=0)$(this).find("div.status").text(e.status);else if("done"===e.status){var t=d3.select(this).select("div.result");t.selectAll("*").remove(),a.bind(t.node(),e)()}}),r.enter().append("div").classed("item",!0).attr("data-id",function(e){return e.image_id}).append("div").classed("image",!0).attr("style",function(e){return"background-image: url("+e.image_url+")"}).append("span").classed("cross",!0).text("✕").on("click",function(t,r){e.remove(t.image_id),$(this).closest(".item").remove(),i(e)}).select(n).select(n).append("div").classed("result",!0).each(a),r.exit().remove()}function s(e){Rx.Observable.zip(Rx.Observable.from(e.pendingResults()),Rx.Observable.interval(2e3)).subscribe({next:function(t){var r=o(t,1),n=r[0];axios.get("/api/v0/result/"+n.image_id).then(function(t){var r=t.data;e.getStatus(n.image_id)!==r.status&&(e.setStatus(n.image_id,r.status),"done"===r.status&&(e.setResultByImageId(n.image_id,r.result),e.save()),i(e))})},error:function(e){},complete:function(){setTimeout(function(){return s(e)},2e3)}})}var o=function(){function e(e,t){var r=[],n=!0,a=!1,i=void 0;try{for(var s,o=e[Symbol.iterator]();!(n=(s=o.next()).done)&&(r.push(s.value),!t||r.length!==t);n=!0);}catch(e){a=!0,i=e}finally{try{!n&&o.return&&o.return()}finally{if(a)throw i}}return r}return function(t,r){if(Array.isArray(t))return t;if(Symbol.iterator in Object(t))return e(t,r);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),u=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),l=function(){function e(){r(this,e),this.key="results",this.arr=[]}return u(e,[{key:"remove",value:function(e){this.arr=this.arr.filter(function(t){return t.image_id!==e}),this.save()}},{key:"add",value:function(e){this.arr.push(e),this.save()}},{key:"save",value:function(){localStorage&&localStorage.setItem(this.key,JSON.stringify(this.arr))}},{key:"getStatus",value:function(e){var t=!0,r=!1,n=void 0;try{for(var a,i=this.arr[Symbol.iterator]();!(t=(a=i.next()).done);t=!0){var s=a.value;if(s.image_id===e)return s.status}}catch(e){r=!0,n=e}finally{try{!t&&i.return&&i.return()}finally{if(r)throw n}}return null}},{key:"setStatus",value:function(e,t){var r=!0,n=!1,a=void 0;try{for(var i,s=this.arr[Symbol.iterator]();!(r=(i=s.next()).done);r=!0){var o=i.value;o.image_id===e&&(o.status=t)}}catch(e){n=!0,a=e}finally{try{!r&&s.return&&s.return()}finally{if(n)throw a}}}},{key:"setResultByImageId",value:function(e,t){for(var r=0;r<this.arr.length;r++)this.arr[r].image_id===e&&(this.arr[r].result=t,this.arr[r].status="done")}},{key:"validate",value:function(e){return Array.isArray(e)}},{key:"toList",value:function(){return this.arr}},{key:"pendingResults",value:function(){return this.arr.filter(function(e){return["pending","processing"].indexOf(e.status)>=0})}},{key:"load",value:function(){if(localStorage)try{var e=JSON.parse(localStorage.getItem(this.key));e||(e=[{status:"done",image_url:"https://flower.jackhftang.com/storage/img/L5UgLRlpweO2640te2H1O82TQQraCFD2RUnbeMrT.jpeg",image_id:"XJPNM6wm8MxS58U6I463Vx5EtvdPxXGn4zThS0Njtf1S2CllndVH8eefAPUl",result:[{class:"barbeton daisy",score:.00028989833663217723},{class:"sweet william",score:.00033965110196731985},{class:"king protea",score:.0008190097287297249},{class:"gazania",score:.0022952156141400337},{class:"passion flower",score:.993553638458252}]}]),this.validate(e)&&(this.arr=e)}catch(e){}}}]),e}();window.renderResults=i;var c=new l;c.load(),i(c),s(c),$('input[type="file"]').on("change",function(e){var t=this.files[0];if(t){var r=new FormData;r.append("image",t.slice(),t.name),axios.post("/api/v0/request",r,{headers:{"Content-Type":"multipart/form-data"}}).then(function(e){c.add(e.data),i(c)}),this.form.reset()}})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 42:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(43);
+
+
+/***/ }),
+
+/***/ 43:
+/***/ (function(module, exports) {
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Result = function () {
+  function Result() {
+    _classCallCheck(this, Result);
+
+    this.key = 'results';
+    this.arr = [];
+  }
+
+  _createClass(Result, [{
+    key: 'remove',
+    value: function remove(imageId) {
+      this.arr = this.arr.filter(function (x) {
+        return x.image_id !== imageId;
+      });
+      this.save();
+    }
+  }, {
+    key: 'add',
+    value: function add(data) {
+      this.arr.push(data);
+      this.save();
+    }
+  }, {
+    key: 'save',
+    value: function save() {
+      if (localStorage) {
+        localStorage.setItem(this.key, JSON.stringify(this.arr));
+      }
+    }
+  }, {
+    key: 'getStatus',
+    value: function getStatus(imageId) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var x = _step.value;
+
+          if (x.image_id === imageId) return x.status;
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return null;
+    }
+  }, {
+    key: 'setStatus',
+    value: function setStatus(imageId, status) {
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.arr[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var x = _step2.value;
+
+          if (x.image_id === imageId) {
+            x.status = status;
+          }
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+    }
+  }, {
+    key: 'setResultByImageId',
+    value: function setResultByImageId(imageId, x) {
+      for (var i = 0; i < this.arr.length; i++) {
+        if (this.arr[i].image_id === imageId) {
+          this.arr[i].result = x;
+          this.arr[i].status = 'done';
+        }
+      }
+    }
+  }, {
+    key: 'validate',
+    value: function validate(arr) {
+      return Array.isArray(arr);
+    }
+  }, {
+    key: 'toList',
+    value: function toList() {
+      // todo: deep clone ??
+      return this.arr;
+    }
+  }, {
+    key: 'pendingResults',
+    value: function pendingResults() {
+      return this.arr.filter(function (x) {
+        return ['pending', 'processing'].indexOf(x.status) >= 0;
+      });
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      if (localStorage) {
+        try {
+          var x = JSON.parse(localStorage.getItem(this.key));
+          if (!x) x = [{
+            "status": "done",
+            "image_url": "https://flower.jackhftang.com/storage/img/6KrKc8seTolJBLFC0sW6mPwkP6n4qbVwORICJvdy.jpeg",
+            "image_id": "1ddUxMvsouic3bVwDn9h8Cxd0OLIqJcFzQVSvou8ptEJxV5l0CrcnwDqHjkY",
+            "result": [{ "class": "carnation", "score": 0.697746753692627 }, {
+              "class": "pincushion flower",
+              "score": 0.08501219004392624
+            }, { "class": "globe thistle", "score": 0.0532408133149147 }, {
+              "class": "common dandelion",
+              "score": 0.04121533781290054
+            }, { "class": "sweet william", "score": 0.03613519296050072 }]
+          }, {
+            "status": "done",
+            "image_url": "https://flower.jackhftang.com/storage/img/6S69ZAKei6AKaIAWV6z6gZaws1UBx4by5eZ2VaWX.jpeg",
+            "image_id": "zUFqsr2K74n6EV9zZEyWJdZ2ukangpjorIDpBiWfocBF2yearO7LapQEsS41",
+            "result": [{ "class": "tree mallow", "score": 0.9667922854423523 }, {
+              "class": "osteospermum",
+              "score": 0.019802046939730644
+            }, { "class": "garden phlox", "score": 0.005472611635923386 }, {
+              "class": "barbeton daisy",
+              "score": 0.0019478568574413657
+            }, { "class": "hibiscus", "score": 0.0013803195906803012 }]
+          }, {
+            "status": "done",
+            "image_url": "https://flower.jackhftang.com/storage/img/OuitCFw8BQ6IwrtwjlMnymWsxXm3nZDko0jDPDHn.jpeg",
+            "image_id": "S2id1XeDoaa6fdsRucRuAL0eODeLu4dmd0HyXlY6T210okIj4NZBl3JjSJIm",
+            "result": [{ "class": "frangipani", "score": 0.97694331407547 }, {
+              "class": "bromelia",
+              "score": 0.0028470498509705067
+            }, { "class": "ruby-lipped cattleya", "score": 0.0013494621962308884 }, {
+              "class": "oxeye daisy",
+              "score": 0.0012980286264792085
+            }, { "class": "columbine", "score": 0.0012799542164430022 }]
+          }, {
+            "status": "done",
+            "image_url": "https://flower.jackhftang.com/storage/img/XbeEn7Nu2OZNvhizn9Fc2ZN3P6EG4pSV0XybkWrb.jpeg",
+            "image_id": "PnAPFKSS6SqUPri2EOGRUpfBXPjbpXcZqll2KxDve8pp4pjfwfKGDDVsObqs",
+            "result": [{ "class": "mexican aster", "score": 0.0013491434510797262 }, {
+              "class": "black-eyed susan",
+              "score": 0.0015574544668197632
+            }, { "class": "tree mallow", "score": 0.0016085893148556352 }, {
+              "class": "bolero deep blue",
+              "score": 0.0020466253627091646
+            }, { "class": "osteospermum", "score": 0.9887164831161499 }]
+          }, {
+            "status": "done",
+            "image_url": "https://flower.jackhftang.com/storage/img/L5UgLRlpweO2640te2H1O82TQQraCFD2RUnbeMrT.jpeg",
+            "image_id": "XJPNM6wm8MxS58U6I463Vx5EtvdPxXGn4zThS0Njtf1S2CllndVH8eefAPUl",
+            "result": [{ "class": "barbeton daisy", "score": 0.00028989833663217723 }, { "class": "sweet william", "score": 0.00033965110196731985 }, { "class": "king protea", "score": 0.0008190097287297249 }, { "class": "gazania", "score": 0.0022952156141400337 }, { "class": "passion flower", "score": 0.993553638458252 }]
+          }];
+          if (this.validate(x)) this.arr = x;
+        } catch (ex) {
+          console.error(ex);
+        }
+      }
+    }
+  }]);
+
+  return Result;
+}();
+
+function parentNode() {
+  return this.parentNode;
+}
+
+function renderResult(d) {
+  // this == div.result
+  if (['pending', 'processing'].indexOf(d.status) >= 0) {
+    d3.select(this).append('div').classed('svg-wrapper', true).append('svg').attr('width', 40).attr('height', 40).attr('viewBox', '10 10 80 80').append('use').attr('xlink:href', '#loading').select(parentNode).select(parentNode).append('div').classed('status', true).text(d.status);
+  }
+  if (d.status === 'done') {
+    // console.log('d', d.result);
+    var row = d3.select(this).append('div').classed('rank-wrapper', true).selectAll('div.rank').data(d.result.sort(function (a, b) {
+      return b.score - a.score;
+    }).slice(0, 4));
+    row.enter().append('div').classed('rank', true).append('span').text(function (d) {
+      return d.class;
+    }).select(parentNode).append('span').text(function (d) {
+      return (100 * d.score).toFixed(1) + '%';
+    });
+  }
+}
+
+function renderResults(res) {
+  var lis = res.toList();
+
+  // for simplicity, for re-render all
+  // d3.select('.list-section').selectAll('div.item').remove();
+
+  var x = d3.select('.list-section').selectAll('div.item').data(lis);
+
+  x.each(function (d) {
+    // this = div.item
+    if (['pending', 'processing'].indexOf(d.status) >= 0) {
+      $(this).find('div.status').text(d.status);
+    } else if (d.status === 'done') {
+      var n = d3.select(this).select('div.result');
+      n.selectAll('*').remove();
+      renderResult.bind(n.node(), d)();
+    }
+  });
+
+  x.enter().append('div').classed('item', true).attr('data-id', function (d) {
+    return d.image_id;
+  }).append('div').classed('image', true).attr('style', function (d) {
+    return 'background-image: url(' + d.image_url + ')';
+  }).append('span').classed('cross', true).text('✕').on('click', function (d, i) {
+    res.remove(d.image_id);
+    // manually remove dom element to preserve (dom, data) pair
+    $(this).closest('.item').remove();
+    renderResults(res);
+  }).select(parentNode).select(parentNode).append('div').classed('result', true).each(renderResult);
+  x.exit().remove();
+}
+window.renderResults = renderResults;
+
+var results = new Result();
+results.load();
+renderResults(results);
+
+function pollResults(results) {
+  var intl = 2 * 1000;
+  Rx.Observable.zip(Rx.Observable.from(results.pendingResults()), Rx.Observable.interval(intl)).subscribe({
+    next: function next(_ref) {
+      var _ref2 = _slicedToArray(_ref, 1),
+          x = _ref2[0];
+
+      axios.get('/api/v0/result/' + x.image_id).then(function (res) {
+        var data = res.data;
+
+        var lastStatus = results.getStatus(x.image_id);
+        if (lastStatus !== data.status) {
+          results.setStatus(x.image_id, data.status);
+
+          if (data.status === 'done') {
+            results.setResultByImageId(x.image_id, data.result);
+            results.save();
+          }
+          renderResults(results);
+        }
+      });
+    },
+    error: function error(err) {
+      return console.error(err);
+    },
+    complete: function complete() {
+      // prevent immediate end if pending is empty
+      setTimeout(function () {
+        return pollResults(results);
+      }, intl);
+    }
+  });
+}
+pollResults(results);
+
+// add listener
+$('input[name="image"]').on('change', function (event) {
+  var file = this.files[0];
+  if (!file) return;
+
+  var form = new FormData();
+  form.append('image', file.slice(), file.name);
+  axios.post('/api/v0/request', form, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(function (result) {
+    results.add(result.data);
+    renderResults(results);
+  });
+
+  // clear form
+  this.form.reset();
+});
+
+$('.upload-button').on('click', function (event) {
+  $('input[name="image"]').click();
+});
+
+/***/ })
+
+/******/ });
