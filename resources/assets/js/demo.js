@@ -113,6 +113,10 @@ function renderResult(d) {
 
 function renderResults(res) {
   let lis = res.toList();
+
+  // for simplicity, for re-render all
+  // d3.select('.list-section').selectAll('div.item').remove();
+
   let x = d3.select('.list-section').selectAll('div.item').data(lis);
 
   x.each(function (d) {
@@ -127,15 +131,15 @@ function renderResults(res) {
   });
 
   x.enter()
-    .append('div').classed('item', true)
+    .append('div').classed('item', true).attr('data-id', d => d.image_id)
     .append('div').classed('image', true)
     .attr('style', d => `background-image: url(${d.image_url})`)
     .append('span').classed('cross', true).text('✕')
     .on('click', function (d, i) {
-      console.log('click', 'delete', d, i)
       res.remove(d.image_id);
+      // manually remove dom element to preserve (dom, data) pair
+      $(this).closest('.item').remove();
       renderResults(res);
-
     })
     .select(parentNode).select(parentNode)
     .append('div').classed('result', true)
@@ -157,8 +161,6 @@ function pollResults(results) {
     next: ([x]) => {
       axios.get(`/api/v0/result/${x.image_id}`).then(res => {
         let data = res.data;
-        // console.log(res.data);
-        // result.update(i, res.data);
 
         let lastStatus = results.getStatus(x.image_id);
         if (lastStatus !== data.status) {
