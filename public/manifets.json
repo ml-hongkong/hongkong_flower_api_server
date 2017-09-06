@@ -1,0 +1,13 @@
+{
+  "name": "Flower Classifier",
+  "short_name": "FC",
+  "icons": [{
+    "src": "images/icons/icon-128x128.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  }],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2F2F2",
+  "theme_color": "#009688"
+}

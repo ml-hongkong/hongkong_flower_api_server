@@ -1,3 +1,9 @@
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/service-worker.js')
+    .then(function() { console.log('Service Worker Registered'); });
+}
+
 class Result {
 
   constructor() {
@@ -250,4 +256,4 @@ $('input[name="image"]').on('change', function (event) {
 
 $('.upload-button').on('click', function(event){
   $('input[name="image"]').click();
-})
+});

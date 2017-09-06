@@ -82,6 +82,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js').then(function () {
+    console.log('Service Worker Registered');
+  });
+}
+
 var Result = function () {
   function Result() {
     _classCallCheck(this, Result);
