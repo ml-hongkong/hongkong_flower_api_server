@@ -5,6 +5,12 @@ class Result {
     this.arr = [];
   }
 
+  remove(imageId) {
+    this.arr = this.arr.filter(x => x.image_id !== imageId);
+    this.save();
+  }
+
+
   add(data) {
     this.arr.push(data);
     this.save();
@@ -14,11 +20,6 @@ class Result {
     if (localStorage) {
       localStorage.setItem(this.key, JSON.stringify(this.arr));
     }
-  }
-
-  remove(imageId) {
-    this.arr = this.arr.filter(x => x.image_id !== imageId);
-    this.save();
   }
 
   getStatus(imageId) {
@@ -63,6 +64,18 @@ class Result {
     if (localStorage) {
       try {
         let x = JSON.parse(localStorage.getItem(this.key));
+        if (!x) x = [{
+          "status": "done",
+          "image_url": "https://flower.jackhftang.com/storage/img/L5UgLRlpweO2640te2H1O82TQQraCFD2RUnbeMrT.jpeg",
+          "image_id": "XJPNM6wm8MxS58U6I463Vx5EtvdPxXGn4zThS0Njtf1S2CllndVH8eefAPUl",
+          "result": [
+            {"class": "barbeton daisy", "score": 0.00028989833663217723},
+            {"class": "sweet william", "score": 0.00033965110196731985},
+            {"class": "king protea", "score": 0.0008190097287297249},
+            {"class": "gazania", "score": 0.0022952156141400337},
+            {"class": "passion flower", "score": 0.993553638458252}
+          ]
+        }];
         if (this.validate(x)) this.arr = x;
       } catch (ex) {
         console.error(ex);
@@ -127,7 +140,6 @@ function renderResults(res) {
     .select(parentNode).select(parentNode)
     .append('div').classed('result', true)
     .each(renderResult);
-
   x.exit().remove();
 }
 window.renderResults = renderResults;
@@ -189,5 +201,3 @@ $('input[type="file"]').on('change', function (event) {
   // clear form
   this.form.reset();
 });
-
-
